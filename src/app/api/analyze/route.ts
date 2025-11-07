@@ -3,10 +3,34 @@ import { prisma } from '@/lib/db';
 import { extractLinkedInProfile } from '@/lib/scraper';
 import { generateAssessment } from '@/lib/ai';
 import { validateLinkedInUrl } from '@/lib/utils';
+import { rateLimit, getClientIp } from '@/lib/ratelimit';
 import { AnalyzeResponse, ErrorResponse } from '@/types';
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting (10 requests per hour per IP)
+    const clientIp = getClientIp(request.headers);
+    const rateLimitResult = rateLimit(clientIp, 10, 60 * 60 * 1000); // 10 requests per hour
+
+    if (!rateLimitResult.success) {
+      const resetDate = new Date(rateLimitResult.reset);
+      return NextResponse.json<ErrorResponse>(
+        {
+          error: 'Too Many Requests',
+          message: `Rate limit exceeded. Try again after ${resetDate.toLocaleTimeString()}.`,
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': rateLimitResult.limit.toString(),
+            'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
+            'X-RateLimit-Reset': rateLimitResult.reset.toString(),
+            'Retry-After': Math.ceil((rateLimitResult.reset - Date.now()) / 1000).toString(),
+          },
+        }
+      );
+    }
+
     const body = await request.json();
     const { linkedinUrl, aboutText } = body;
 

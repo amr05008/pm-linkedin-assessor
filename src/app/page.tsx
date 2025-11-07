@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import toast from 'react-hot-toast';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import LandingPage from '@/components/LandingPage';
 import ProcessingAnimation from '@/components/ProcessingAnimation';
 import EmailGate from '@/components/EmailGate';
@@ -30,7 +32,11 @@ export default function Home() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to analyze profile');
+        const errorData = await response.json().catch(() => ({}));
+        if (response.status === 429) {
+          throw new Error(errorData.message || 'Rate limit exceeded. Please try again later.');
+        }
+        throw new Error(errorData.message || 'Failed to analyze profile');
       }
 
       const data = await response.json();
@@ -44,7 +50,8 @@ export default function Home() {
       setFlowState('email-gate');
     } catch (error) {
       console.error('Error analyzing profile:', error);
-      alert('Something went wrong. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Something went wrong. Please try again.';
+      toast.error(errorMessage);
       setFlowState('landing');
     } finally {
       setIsLoading(false);
@@ -78,14 +85,14 @@ export default function Home() {
       setFlowState('results');
     } catch (error) {
       console.error('Error submitting email:', error);
-      alert('Something went wrong. Please try again.');
+      toast.error('Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <>
+    <ErrorBoundary>
       {flowState === 'landing' && (
         <LandingPage onSubmit={handleUrlSubmit} isLoading={isLoading} />
       )}
@@ -102,6 +109,6 @@ export default function Home() {
           assessmentId={assessmentId}
         />
       )}
-    </>
+    </ErrorBoundary>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { validateEmail } from '@/lib/utils';
+import Spinner from './Spinner';
 
 interface EmailGateProps {
   onSubmit: (email: string) => void;
@@ -94,8 +95,9 @@ export default function EmailGate({ onSubmit, isLoading = false }: EmailGateProp
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 transform hover:scale-[1.02] disabled:scale-100"
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 transform hover:scale-[1.02] disabled:scale-100 flex items-center justify-center gap-2"
             >
+              {isLoading && <Spinner />}
               {isLoading ? 'Loading...' : 'Show Me My Results'}
             </button>
           </form>

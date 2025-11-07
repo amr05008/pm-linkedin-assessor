@@ -1,0 +1,15 @@
+# Systematic Archetypes
+
+**A Visual Philosophy of Categorical Identity**
+
+This design movement treats human classification as a visual science—transforming personality taxonomies into geometric systems that feel both analytical and intimate. The work borrows the visual vocabulary of scientific documentation: precise grids, repeating patterns, categorical markers, systematic color coding. Each composition suggests a rigorous methodology for understanding the unmeasurable, as if human nature could be plotted, graphed, and labeled with the same confidence we bring to observable phenomena.
+
+The aesthetic centers on **modular geometry and categorical structure**. Forms repeat and accumulate—circles within grids, boxes containing boxes, patterns that suggest data points or specimen collections. Color functions as a classification system: limited palettes where each hue represents a category, a type, an archetype. The overall effect is of looking at a sophisticated infographic or research poster from an imaginary social science institute, where the messiness of human personality has been distilled into clean, repeating shapes.
+
+**Typography exists as clinical annotation**—small, precise labels that anchor the visual system without overwhelming it. Words appear where a scientist would place them: marking categories, labeling specimens, providing minimal context. The type feels institutional but not sterile, systematic but crafted with care. Large display text, when present, functions as a categorical header or archetype name—bold enough to organize the visual field but always serving the geometric composition.
+
+**Space and rhythm follow principles of systematic observation**. Elements breathe within structured grids. Repetition creates visual data—the same shape appearing multiple times suggests measurement, comparison, the building of evidence. Negative space functions like the white margins of a research document, giving the eye room to process the classification system being presented. Every placement feels intentional, as if the composition itself is proving a thesis about order and category.
+
+The craftsmanship must be **painstaking and expert-level**—this is work that appears labored over for countless hours by someone at the absolute top of their field. Each geometric form perfectly aligned, each color choice deliberate and tested, each typographic decision made with precision. The final piece should look like it emerged from a design studio specializing in institutional identity for forward-thinking research organizations—meticulously crafted, impossible to improve upon, the product of deep expertise.
+
+**Material and texture suggest printed matter**: subtle paper grain, ink density, the feeling that this could be a poster in a gallery or a page from an exclusive research publication. The work exists at the intersection of data visualization, museum graphics, and contemporary poster design—where information becomes art through obsessive attention to composition, repetition, and systematic beauty.

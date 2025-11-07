@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import ToastProvider from '@/components/ToastProvider';
+import Footer from '@/components/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001'),
   title: 'PM Assessment Quiz - Discover Your Product Manager Archetype',
   description:
     'Find out what kind of PM you really are through AI-powered analysis. Get roasted (lovingly) by Claude AI and discover your unique product manager archetype.',
@@ -16,6 +19,15 @@ export const metadata: Metadata = {
     'career quiz',
   ],
   authors: [{ name: 'PM Assessment Quiz' }],
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '16x16 32x32 48x48' },
+      { url: '/favicon.png', type: 'image/png', sizes: '256x256' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '128x128' },
+    ],
+  },
   openGraph: {
     title: 'What Kind of PM Are You?',
     description: 'Discover your Product Manager archetype through AI-powered analysis',
@@ -45,7 +57,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ToastProvider />
+        <div className="min-h-screen flex flex-col">
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
+        </div>
+      </body>
     </html>
   );
 }
