@@ -8,7 +8,7 @@ import { AnalyzeResponse, ErrorResponse } from '@/types';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { linkedinUrl } = body;
+    const { linkedinUrl, aboutText } = body;
 
     // Validate LinkedIn URL
     if (!linkedinUrl) {
@@ -32,6 +32,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate aboutText
+    if (!aboutText || aboutText.trim().length < 50) {
+      return NextResponse.json<ErrorResponse>(
+        {
+          error: 'Bad Request',
+          message: 'About section must be at least 50 characters',
+        },
+        { status: 400 }
+      );
+    }
+
     // Create Assessment record in database (without email initially)
     const assessment = await prisma.assessment.create({
       data: {
@@ -42,8 +53,8 @@ export async function POST(request: NextRequest) {
     // Process in background (for now, we'll do it synchronously for MVP)
     // In production, you might want to use a queue or background job
     try {
-      // Extract LinkedIn profile data
-      const profileData = await extractLinkedInProfile(linkedinUrl);
+      // Extract LinkedIn profile data (now with user-provided about text)
+      const profileData = await extractLinkedInProfile(linkedinUrl, aboutText);
 
       // Generate AI assessment
       const assessmentData = await generateAssessment(profileData);

@@ -2,23 +2,24 @@ import { ProfileData } from '@/types';
 
 /**
  * Extract LinkedIn profile data
- * MVP: Returns mock data based on URL patterns
- * Phase 2: Can be replaced with real scraping or API integration
+ * Now uses user-provided About text for personalized assessments
  */
-export async function extractLinkedInProfile(url: string): Promise<ProfileData> {
+export async function extractLinkedInProfile(url: string, aboutText: string): Promise<ProfileData> {
   // Validate LinkedIn URL format
   if (!isValidLinkedInUrl(url)) {
     throw new Error('Invalid LinkedIn URL format');
   }
 
-  // For MVP, return mock data
-  // This can be replaced with actual scraping or API calls in Phase 2
-  const mockProfiles = getMockProfileData(url);
+  // Extract username from URL for headline generation
+  const username = url.split('/in/')[1]?.split('/')[0] || 'user';
 
-  // Simulate network delay
-  await new Promise((resolve) => setTimeout(resolve, 500));
-
-  return mockProfiles;
+  // Use the user-provided About text directly
+  return {
+    url,
+    headline: `Product Manager | ${username}`, // Simple generic headline
+    about: aboutText, // User's actual About section!
+    experience: '', // Can be added later if needed
+  };
 }
 
 /**

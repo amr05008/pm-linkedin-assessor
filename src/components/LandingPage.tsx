@@ -4,12 +4,13 @@ import { useState } from 'react';
 import { validateLinkedInUrl } from '@/lib/utils';
 
 interface LandingPageProps {
-  onSubmit: (url: string) => void;
+  onSubmit: (url: string, aboutText: string) => void;
   isLoading?: boolean;
 }
 
 export default function LandingPage({ onSubmit, isLoading = false }: LandingPageProps) {
   const [url, setUrl] = useState('');
+  const [aboutText, setAboutText] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -22,7 +23,17 @@ export default function LandingPage({ onSubmit, isLoading = false }: LandingPage
       return;
     }
 
-    onSubmit(url);
+    if (!aboutText.trim()) {
+      setError('Please paste your LinkedIn About section');
+      return;
+    }
+
+    if (aboutText.trim().length < 50) {
+      setError('Please provide at least 50 characters from your About section');
+      return;
+    }
+
+    onSubmit(url, aboutText);
   };
 
   return (
@@ -62,6 +73,29 @@ export default function LandingPage({ onSubmit, isLoading = false }: LandingPage
                 } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-gray-900`}
                 disabled={isLoading}
               />
+            </div>
+
+            <div>
+              <label htmlFor="about-text" className="block text-sm font-medium text-gray-700 mb-2">
+                Paste your LinkedIn "About" section
+              </label>
+              <textarea
+                id="about-text"
+                value={aboutText}
+                onChange={(e) => {
+                  setAboutText(e.target.value);
+                  setError('');
+                }}
+                placeholder="Copy and paste your LinkedIn About section here... (e.g., 'Passionate product leader with 5+ years of experience building user-centric products...')"
+                rows={6}
+                className={`w-full px-4 py-3 border ${
+                  error ? 'border-red-500' : 'border-gray-300'
+                } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-gray-900 resize-none`}
+                disabled={isLoading}
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                Don't have an About section? Write a brief description of your PM experience (min 50 characters)
+              </p>
               {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
             </div>
 
