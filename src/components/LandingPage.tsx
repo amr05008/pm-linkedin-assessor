@@ -5,6 +5,7 @@ import { track } from '@vercel/analytics';
 import { validateLinkedInUrl } from '@/lib/utils';
 import Spinner from './Spinner';
 import RoastSelector, { RoastLevel } from './RoastSelector';
+import CounterBadge from './CounterBadge';
 
 interface LandingPageProps {
   onSubmit: (url: string, aboutText: string, roastLevel: RoastLevel) => void;
@@ -42,19 +43,20 @@ export default function LandingPage({ onSubmit, isLoading = false }: LandingPage
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4 pt-8">
+    <div className="min-h-screen bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center p-4 pt-8">
       <div className="max-w-2xl w-full">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-white mb-4">
             What Kind of PM Are You? 🎯
           </h1>
-          <p className="text-lg text-gray-700 mb-2">
+          <p className="text-lg text-white mb-2">
             Discover your Product Manager archetype through AI-powered analysis
           </p>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-white/90 mb-4">
             (Warning: Results may be uncomfortably accurate)
           </p>
+          <CounterBadge />
         </div>
 
         {/* Main Card */}
@@ -143,7 +145,7 @@ export default function LandingPage({ onSubmit, isLoading = false }: LandingPage
 
         {/* Sample Archetypes Teaser */}
         <div className="mt-8 text-center">
-          <p className="text-sm text-gray-600 mb-3">
+          <p className="text-sm text-white/80 mb-3">
             Could you be a...
           </p>
           <div className="flex flex-wrap justify-center gap-2">
