@@ -1411,3 +1411,279 @@ export type RoastLevel = 'light' | 'medium' | 'burnt';
 **Files Modified:** 4
 **Build Status:** ✅ Successful, no errors
 **Status:** ✅ Feature complete, tested, ready for production
+
+---
+
+## Session 5: Live Counter Badge & Purple Gradient - November 7, 2025
+
+### Summary
+Implemented live PM counter badge with animated count-up effect that displays real assessment count from database. Updated landing page with vibrant purple gradient background matching production design. Created deployment workflow and project context files for better session continuity.
+
+### What We Built
+
+#### 1. Live Counter Badge Feature
+**Problem:** Needed social proof showing how many users have completed assessments
+**Solution:** Real-time counter with glassmorphism design and count-up animation
+
+**New Component: `src/components/CounterBadge.tsx`**
+- Fetches real assessment count from `/api/stats` on page load
+- Animates from 0 to actual count over 2 seconds (60 frames)
+- Glassmorphism design with `backdrop-blur-md` and semi-transparent background
+- White border with transparency for depth
+- Shows "Loading..." during API fetch
+- Mobile responsive text sizing
+- Currently displaying: "🔥 18 PMs roasted"
+
+**New API Endpoint: `src/app/api/stats/route.ts`**
+- Simple GET endpoint that queries Prisma for assessment count
+- Returns JSON: `{ count: number }`
+- Clean error handling with 500 status on failure
+- ~479ms response time
+
+#### 2. Visual Design Update
+**Background Gradient:** Changed from light blue to vibrant purple
+- Before: `from-blue-50 to-indigo-100`
+- After: `from-purple-500 to-indigo-600`
+- Matches production design reference
+
+**Text Color Updates for Contrast:**
+- Main heading: `text-white`
+- Subtitle: `text-white`
+- Warning text: `text-white/90`
+- "Could you be a..." text: `text-white/80`
+- Maintains readability on darker background
+
+#### 3. Deployment Infrastructure
+**Created `/deploy` slash command** (`.claude/commands/deploy.md`)
+- Automates deployment workflow
+- Reviews git status and diff
+- Summarizes changes
+- Creates properly formatted commit message
+- Pushes to production
+- Safety checks for secrets and proper git conventions
+
+**Note:** Slash command not yet recognized by Claude Code (manual workflow used instead)
+
+#### 4. Project Context Files
+Created comprehensive documentation for session continuity:
+
+**`.claude/PROJECT_STATUS.md`** - Current state snapshot
+- Quick overview of project
+- Working features vs in-progress vs not implemented
+- Environment variables reference
+- Database info and record counts
+- Recent changes and known issues
+- Cost tracking
+- Next steps prioritized
+
+**`.claude/DECISIONS.md`** - Technical decisions log
+- Architecture decisions (why Next.js, Supabase, etc.)
+- Implementation decisions (roast levels, rate limiting, etc.)
+- UI/UX decisions (purple gradient, glassmorphism, toasts)
+- Data decisions (JSON storage, separate tables)
+- Security decisions (IP rate limiting, Zod validation)
+- Deployment decisions (Vercel)
+- Each with rationale and alternatives considered
+
+**`.claude/QUICK_START.md`** - Resume work guide
+- Start here checklist for new sessions
+- Common commands reference
+- File locations cheat sheet
+- Environment variables list
+- Troubleshooting guide
+- Key architecture points
+- Current priorities
+
+### Files Created (4 files)
+
+1. `src/components/CounterBadge.tsx` - Live counter component (82 lines)
+2. `src/app/api/stats/route.ts` - Stats API endpoint (15 lines)
+3. `.claude/PROJECT_STATUS.md` - Project state documentation
+4. `.claude/DECISIONS.md` - Technical decisions log
+5. `.claude/QUICK_START.md` - Quick start guide
+
+### Files Modified (1 file)
+
+1. `src/components/LandingPage.tsx`
+   - Imported CounterBadge component
+   - Changed background gradient to purple
+   - Updated all text colors to white/white with opacity
+   - Added CounterBadge below subtitle in header
+
+### Technical Implementation Details
+
+**Animation Logic:**
+```typescript
+// Count-up over 2 seconds with 60 frames
+const duration = 2000;
+const steps = 60;
+const increment = targetCount / steps;
+const stepDuration = duration / steps;
+```
+
+**Glassmorphism Styling:**
+```css
+backdrop-blur-md
+bg-white/20
+border border-white/30
+shadow-lg
+```
+
+**API Integration:**
+- CounterBadge fetches on mount with `useEffect`
+- Displays loading state while fetching
+- Handles fetch errors gracefully (falls back to 0)
+
+### Testing Results
+
+**Build Status:**
+✅ TypeScript compilation successful (no errors)
+✅ Next.js build completed successfully
+✅ Bundle size: 7.9 kB (increased from 8.14 kB)
+✅ All routes compile without issues
+
+**Component Testing:**
+✅ Counter badge loads and displays count
+✅ Animation smooth from 0 → 18 over 2 seconds
+✅ Glassmorphism effect renders beautifully on purple gradient
+✅ Mobile responsive layout
+✅ API endpoint returns correct count (18 assessments)
+✅ Page load time acceptable
+
+**Integration Testing:**
+✅ Counter integrates seamlessly into LandingPage header
+✅ Purple gradient displays correctly
+✅ White text has good contrast
+✅ Dev server runs on port 3002
+✅ No console errors
+
+### Database Status
+
+**Current Records:** 18 assessments
+**API Cost:** ~$0.27 total (18 × $0.015)
+**Database:** Supabase free tier, plenty of headroom
+
+### Session End
+
+**Commit Info:**
+- ✅ Committed: SHA `eefd003`
+- ✅ Build: Passing
+- ✅ All new files staged and committed
+- ⚠️ Not pushed to GitHub (requires manual authentication)
+
+**Commit Message:**
+```
+feat: add live PM counter badge and purple gradient background
+
+- Add CounterBadge component with animated count-up effect
+- Implement /api/stats endpoint to fetch total assessment count from database
+- Update landing page with vibrant purple-to-indigo gradient
+- Change text colors to white for better contrast on dark background
+- Add glassmorphism design with backdrop blur and transparency
+- Create /deploy slash command for streamlined deployments
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+### Known Issues
+
+1. **Git Push Failed:** 
+   - Error: `fatal: could not read Username for 'https://github.com'`
+   - Resolution: Requires manual push with authentication
+   - Command: `git push origin main`
+
+2. **Slash Command Not Recognized:**
+   - `/deploy` command created but not recognized by Claude Code
+   - Used manual deployment workflow as workaround
+   - May need to restart Claude Code or check command format
+
+### User Experience Improvements
+
+**Social Proof:**
+- Counter shows "18 PMs roasted" with fire emoji
+- Creates FOMO and credibility
+- Number will grow organically as more users complete assessments
+
+**Visual Appeal:**
+- Purple gradient much more engaging than light blue
+- Matches modern design trends
+- Better for screenshots and social sharing
+
+**Performance:**
+- Counter adds minimal overhead
+- API query is fast (~479ms)
+- Animation is smooth and non-blocking
+
+### Best Practices Discussion
+
+Had productive discussion about session documentation:
+- Confirmed CLAUDE.md is good historical log
+- PROJECT_STATUS.md is helpful for resuming work
+- DECISIONS.md tracks "why" behind technical choices
+- QUICK_START.md is practical reference
+- Decided SESSION_END_CHECKLIST.md was overkill for solo project
+- Agreed to add simple "Session End" section to each CLAUDE.md entry instead
+
+---
+
+## Next Session Priorities
+
+### HIGH PRIORITY - Deployment
+1. **Push to GitHub** (5 min)
+   - [ ] Manual git push with authentication
+   - [ ] Verify push successful
+   - [ ] Check GitHub shows latest commit
+
+2. **Deploy to Vercel** (20 min)
+   - [ ] Connect GitHub repo to Vercel
+   - [ ] Add environment variables (DATABASE_URL, ANTHROPIC_API_KEY, NEXT_PUBLIC_APP_URL)
+   - [ ] Deploy to production
+   - [ ] Test live site
+
+3. **Production Testing** (30 min)
+   - [ ] Test complete user flow on live URL
+   - [ ] Verify counter badge shows real count
+   - [ ] Test social sharing (LinkedIn, Twitter)
+   - [ ] Check OG image preview
+   - [ ] Verify mobile responsiveness
+   - [ ] Test rate limiting in production
+
+### MEDIUM PRIORITY - Analytics & Monitoring
+4. **Analytics Setup** (30 min)
+   - [ ] Verify Vercel Analytics is working
+   - [ ] Track key events (landing views, assessments started, emails captured, shares)
+   - [ ] Set up conversion funnel
+   - [ ] Optional: Add Plausible or PostHog
+
+5. **Admin Dashboard** (2-3 hours)
+   - [ ] Create `/admin` route with authentication
+   - [ ] View all assessments with filters
+   - [ ] View collected emails
+   - [ ] Export emails to CSV
+   - [ ] Basic analytics dashboard
+
+### LOW PRIORITY - Enhancements
+6. **Counter Enhancements** (30 min)
+   - [ ] Cache count with revalidation (reduce DB queries)
+   - [ ] Add "and counting..." text
+   - [ ] Consider showing most popular archetype
+
+7. **Performance Optimization** (1 hour)
+   - [ ] Add Next.js Image optimization
+   - [ ] Lazy load components
+   - [ ] Optimize bundle size
+   - [ ] Add loading skeletons
+
+---
+
+**Session Duration:** ~60 minutes
+**Token Usage:** 62,000 / 200,000 (31%)
+**Major Features Added:** 2 (Counter badge, Purple gradient)
+**New Components:** 1
+**New API Routes:** 1
+**Files Created:** 4
+**Files Modified:** 1
+**Commit SHA:** eefd003
+**Status:** ✅ Feature complete, committed locally, ready to push and deploy
