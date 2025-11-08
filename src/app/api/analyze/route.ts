@@ -71,6 +71,7 @@ export async function POST(request: NextRequest) {
     const assessment = await prisma.assessment.create({
       data: {
         linkedinUrl,
+        aboutText,
       },
     });
 

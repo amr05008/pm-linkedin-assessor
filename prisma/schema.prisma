@@ -13,6 +13,7 @@ datasource db {
 model Assessment {
   id                String    @id @default(uuid())
   linkedinUrl       String
+  aboutText         String?   @db.Text // User's LinkedIn About section
   email             String?
   archetype         String?
   assessmentData    Json?     // Full AI response stored as JSON
