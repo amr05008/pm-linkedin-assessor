@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { track } from '@vercel/analytics';
 import { validateLinkedInUrl } from '@/lib/utils';
 import Spinner from './Spinner';
 import RoastSelector, { RoastLevel } from './RoastSelector';
@@ -36,6 +37,7 @@ export default function LandingPage({ onSubmit, isLoading = false }: LandingPage
       return;
     }
 
+    track('assessment_started', { roast_level: roastLevel });
     onSubmit(url, aboutText, roastLevel);
   };
 

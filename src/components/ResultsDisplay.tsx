@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect } from 'react';
+import { track } from '@vercel/analytics';
 import { AssessmentData } from '@/types';
 import { getArchetypeByName } from '@/config/archetypes';
 import ShareButtons from './ShareButtons';
@@ -14,6 +16,10 @@ export default function ResultsDisplay({
   assessmentId,
 }: ResultsDisplayProps) {
   const archetype = getArchetypeByName(assessmentData.archetype);
+
+  useEffect(() => {
+    track('results_viewed', { archetype: assessmentData.archetype });
+  }, [assessmentData.archetype]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">

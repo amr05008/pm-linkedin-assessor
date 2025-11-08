@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { track } from '@vercel/analytics';
 import { Share2, Check, Copy } from 'lucide-react';
 import { copyToClipboard, getShareUrl } from '@/lib/utils';
 
@@ -15,6 +16,7 @@ export default function ShareButtons({ assessmentId, archetype }: ShareButtonsPr
   const shareText = `I just discovered my PM archetype: ${archetype}! 🎯 What's yours?`;
 
   const handleCopyLink = async () => {
+    track('share_button_clicked', { method: 'copy_link' });
     const success = await copyToClipboard(shareUrl);
     if (success) {
       setCopied(true);
@@ -25,6 +27,7 @@ export default function ShareButtons({ assessmentId, archetype }: ShareButtonsPr
   const handleNativeShare = async () => {
     if (navigator.share) {
       try {
+        track('share_button_clicked', { method: 'native_share' });
         await navigator.share({
           title: 'My PM Archetype',
           text: shareText,
@@ -41,6 +44,7 @@ export default function ShareButtons({ assessmentId, archetype }: ShareButtonsPr
   };
 
   const handleTwitterShare = () => {
+    track('share_button_clicked', { method: 'twitter' });
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
       shareText
     )}&url=${encodeURIComponent(shareUrl)}`;
@@ -48,6 +52,7 @@ export default function ShareButtons({ assessmentId, archetype }: ShareButtonsPr
   };
 
   const handleLinkedInShare = () => {
+    track('share_button_clicked', { method: 'linkedin' });
     const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
       shareUrl
     )}`;

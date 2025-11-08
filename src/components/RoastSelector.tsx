@@ -1,5 +1,7 @@
 'use client';
 
+import { track } from '@vercel/analytics';
+
 export type RoastLevel = 'light' | 'medium' | 'burnt';
 
 interface RoastOption {
@@ -53,7 +55,12 @@ export default function RoastSelector({
             <button
               key={option.id}
               type="button"
-              onClick={() => !disabled && onSelect(option.id)}
+              onClick={() => {
+                if (!disabled) {
+                  track('roast_level_selected', { level: option.id });
+                  onSelect(option.id);
+                }
+              }}
               disabled={disabled}
               className={`
                 relative p-4 rounded-xl border-2 transition-all duration-200

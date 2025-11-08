@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { track } from '@vercel/analytics';
 import { validateEmail } from '@/lib/utils';
 import Spinner from './Spinner';
 
@@ -23,6 +24,7 @@ export default function EmailGate({ onSubmit, isLoading = false }: EmailGateProp
       return;
     }
 
+    track('email_submitted');
     onSubmit(email);
   };
 
