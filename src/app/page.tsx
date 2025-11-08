@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import LandingPage from '@/components/LandingPage';
@@ -16,6 +16,70 @@ export default function Home() {
   const [assessmentId, setAssessmentId] = useState<string>('');
   const [assessmentData, setAssessmentData] = useState<AssessmentData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Prevent pull-to-refresh on mobile (iOS specifically)
+  useEffect(() => {
+    let startY = 0;
+
+    const preventPull = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      const scrollY = window.scrollY || window.pageYOffset;
+
+      // If we're at the top of the page and user is pulling down
+      if (scrollY <= 0 && touch.clientY > startY) {
+        e.preventDefault();
+      }
+    };
+
+    const recordStartY = (e: TouchEvent) => {
+      startY = e.touches[0].clientY;
+    };
+
+    // Use passive: false to allow preventDefault
+    document.addEventListener('touchstart', recordStartY, { passive: true });
+    document.addEventListener('touchmove', preventPull, { passive: false });
+
+    return () => {
+      document.removeEventListener('touchstart', recordStartY);
+      document.removeEventListener('touchmove', preventPull);
+    };
+  }, []);
+
+  // Persist state to sessionStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('flowState', flowState);
+      if (assessmentId) {
+        sessionStorage.setItem('assessmentId', assessmentId);
+      }
+      if (assessmentData) {
+        sessionStorage.setItem('assessmentData', JSON.stringify(assessmentData));
+      }
+    }
+  }, [flowState, assessmentId, assessmentData]);
+
+  // Restore state from sessionStorage on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedFlowState = sessionStorage.getItem('flowState') as FlowState | null;
+      const savedAssessmentId = sessionStorage.getItem('assessmentId');
+      const savedAssessmentData = sessionStorage.getItem('assessmentData');
+
+      if (savedFlowState && savedFlowState !== 'landing') {
+        setFlowState(savedFlowState);
+      }
+      if (savedAssessmentId) {
+        setAssessmentId(savedAssessmentId);
+      }
+      if (savedAssessmentData) {
+        try {
+          setAssessmentData(JSON.parse(savedAssessmentData));
+        } catch (error) {
+          console.error('Error parsing saved assessment data:', error);
+        }
+      }
+    }
+  }, []);
 
   const handleUrlSubmit = async (url: string, aboutText: string, roastLevel: string) => {
     setIsLoading(true);
