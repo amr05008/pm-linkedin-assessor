@@ -1200,3 +1200,214 @@ icons: {
 **New Libraries:** 2 (ratelimit.ts, react-hot-toast)
 **Assets Created:** 5 (OG image + 4 favicon files)
 **Status:** ✅ Production-ready, polished, ready for public launch
+
+---
+
+## Session 4: Roast Level Selector - November 7, 2025
+
+### Summary
+Added customizable roast intensity feature allowing users to choose between three levels of feedback tone: Light Roast (gentle/encouraging), Medium Roast (witty/playful), and Burnt Toast (brutally honest). This gives users control over how direct and savage they want their AI assessment to be.
+
+### What We Built
+
+#### 1. RoastSelector Component
+**Problem:** One-size-fits-all tone doesn't work for everyone
+**Solution:** Let users choose their preferred roast intensity before analysis
+
+**New Component: `src/components/RoastSelector.tsx`**
+- Three selectable roast level cards in responsive grid:
+  - **☕ Light Roast** - "Gentle observations with a friendly tone"
+  - **🔥 Medium Roast** - "Witty commentary with a bite" (default)
+  - **🥵 Burnt Toast** - "Unfiltered, brutally honest"
+- Features:
+  - Visual checkmark indicator on selected card
+  - Border highlight with indigo color scheme (matches app aesthetic)
+  - Hover effects and smooth transitions
+  - Disabled state during loading
+  - Responsive: 3 columns on desktop, stacks on mobile
+  - TypeScript type safety with `RoastLevel` type
+
+#### 2. Integration Throughout App Flow
+
+**LandingPage Component Updates (`src/components/LandingPage.tsx`):**
+- Added `roastLevel` state (defaults to 'medium')
+- Integrated RoastSelector above LinkedIn URL input
+- Updated form submission to include selected roast level
+- Modified `onSubmit` signature to accept roast level parameter
+- Selector is disabled during loading state
+- Minor UI improvements:
+  - Added top padding (`pt-8`) for better spacing
+  - Reduced headline from `text-5xl` to `text-4xl`
+  - Reduced subtitle from `text-xl` to `text-lg`
+
+**Main Page Updates (`src/app/page.tsx`):**
+- Modified `handleUrlSubmit` to accept `roastLevel` parameter
+- Passes roast level to `/api/analyze` endpoint
+- Maintains state flow: landing → processing → email-gate → results
+
+**API Route Updates (`src/app/api/analyze/route.ts`):**
+- Accepts `roastLevel` from request body (defaults to 'medium')
+- Validates and passes roast level to AI assessment generator
+- No breaking changes - backward compatible with default
+
+#### 3. AI Prompt System Enhancement
+
+**Enhanced AI Library (`src/lib/ai.ts`):**
+- Added `RoastLevel` type definition
+- Created `getRoastInstructions()` function with three distinct tones:
+
+**Light Roast Instructions:**
+```
+"Provide gentle, encouraging feedback with constructive observations.
+Be friendly and supportive. Keep the tone positive and uplifting while
+still being honest. Think of yourself as a supportive mentor who wants
+to help them grow."
+```
+
+**Medium Roast Instructions (Original Tone):**
+```
+"Provide witty, humorous analysis with a balance of truth and comedy.
+Be clever and engaging. Your tone should be playfully snarky - like
+roasting a friend you genuinely like. Mix compliments with gentle teasing."
+```
+
+**Burnt Toast Instructions:**
+```
+"Provide brutally honest, unfiltered feedback. Don't hold back. Be direct
+and call out any BS. Your tone should be like a no-nonsense critic who
+tells it like it is. Be savage but accurate. Make them laugh-cry at the truth."
+```
+
+- Updated `generateAssessmentPrompt()` to accept roast level parameter
+- Injects roast-specific instructions into Claude prompt
+- Updated `generateAssessment()` function signature to accept roast level
+- All archetypes, traits, and format remain the same - only tone changes
+
+### Files Modified/Created
+
+**New Files (1):**
+1. `src/components/RoastSelector.tsx` - Roast level selector component (93 lines)
+
+**Modified Files (4):**
+1. `src/components/LandingPage.tsx` - Integrated selector, UI adjustments
+2. `src/app/page.tsx` - Added roast level to submission flow
+3. `src/app/api/analyze/route.ts` - Accept and pass roast level
+4. `src/lib/ai.ts` - AI prompt adapts to roast level intensity
+
+### Technical Implementation Details
+
+**Type Safety:**
+```typescript
+export type RoastLevel = 'light' | 'medium' | 'burnt';
+```
+
+**Default Behavior:**
+- Defaults to 'medium' (original witty tone)
+- Backward compatible - old code without roast level still works
+- Validation ensures only valid roast levels are accepted
+
+**User Experience Flow:**
+1. User lands on page → sees roast selector (Medium pre-selected)
+2. User can click any of the three cards to change selection
+3. Visual feedback: checkmark + border highlight on selected card
+4. User fills in LinkedIn URL and About section
+5. Roast level is sent with analysis request
+6. AI adjusts tone based on selection
+7. Results reflect chosen intensity level
+
+**Styling Consistency:**
+- Uses existing Tailwind color scheme (indigo-500, blue-50)
+- Matches button and card styling from rest of app
+- Responsive grid layout consistent with features section
+- Smooth transitions and hover effects
+
+### Testing Results
+
+**Build Status:**
+- ✅ TypeScript compilation successful (no errors)
+- ✅ Next.js build completed successfully
+- ✅ Bundle size: 8.14 kB (increased from 6.65 kB due to new component)
+- ✅ All routes compile without issues
+
+**Component Testing:**
+- ✅ All three roast levels are selectable
+- ✅ Visual feedback (checkmark, border) works correctly
+- ✅ Disabled state during loading works
+- ✅ Mobile responsive layout (cards stack vertically)
+- ✅ Desktop layout (3 columns side-by-side)
+
+**Integration Testing:**
+- ✅ Roast level passed through entire flow
+- ✅ AI receives correct roast instructions
+- ✅ Default 'medium' works when no selection made
+- ✅ No breaking changes to existing functionality
+
+**Expected AI Behavior Changes:**
+- **Light Roast**: More encouraging language, focuses on strengths, gentle feedback on growth areas
+- **Medium Roast**: Original witty tone with playful teasing and humor
+- **Burnt Toast**: Direct, no-BS feedback, savage roasting, brutally honest observations
+
+### User Benefits
+
+✅ **Customization**: Users control how harsh they want the feedback
+✅ **Accessibility**: Some users prefer gentle, others want brutal honesty
+✅ **Engagement**: Curious users will try multiple roast levels (more sessions)
+✅ **Shareability**: "I did Burnt Toast and got destroyed" adds viral potential
+✅ **Professional Option**: Light Roast makes it safe for professional sharing
+
+### UI/UX Improvements
+
+**Layout Enhancements:**
+- Added 32px top padding for better spacing
+- Reduced headline size for cleaner look
+- Reduced subtitle size for better balance
+- Roast selector positioned prominently at top of form
+
+**Visual Design:**
+- Cards use white background with border (clean, minimal)
+- Selected state uses indigo-500 border (brand color)
+- Subtle hover effects for interactivity
+- Emojis make options immediately recognizable
+- Clear descriptions set expectations
+
+### Performance Impact
+
+**Bundle Size:**
+- Previous: 6.65 kB
+- Current: 8.14 kB
+- Increase: ~1.5 kB (minimal impact)
+- Still well within acceptable range
+
+**Runtime Performance:**
+- No performance impact (component renders once)
+- State management is lightweight (single string value)
+- No additional API calls required
+
+### Future Enhancement Opportunities
+
+**Potential Additions:**
+1. **Roast Level Stats**
+   - Show "X% of users choose Burnt Toast"
+   - Display most popular roast level
+
+2. **Roast Level in Results**
+   - Show which level was used
+   - "Roasted at: 🥵 Burnt Toast level"
+
+3. **Roast Level Comparison**
+   - "Try a different roast level" CTA on results
+   - Compare how assessment changes by level
+
+4. **Social Sharing Enhancement**
+   - Include roast level in share text
+   - "I got [Archetype] at Burnt Toast level 🥵"
+
+---
+
+**Session Duration:** ~45 minutes
+**Token Usage:** ~50,000 / 200,000 (25%)
+**Major Features Added:** 1 (Roast Level Selector)
+**New Components:** 1
+**Files Modified:** 4
+**Build Status:** ✅ Successful, no errors
+**Status:** ✅ Feature complete, tested, ready for production

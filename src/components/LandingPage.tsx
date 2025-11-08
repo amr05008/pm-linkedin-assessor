@@ -3,15 +3,17 @@
 import { useState } from 'react';
 import { validateLinkedInUrl } from '@/lib/utils';
 import Spinner from './Spinner';
+import RoastSelector, { RoastLevel } from './RoastSelector';
 
 interface LandingPageProps {
-  onSubmit: (url: string, aboutText: string) => void;
+  onSubmit: (url: string, aboutText: string, roastLevel: RoastLevel) => void;
   isLoading?: boolean;
 }
 
 export default function LandingPage({ onSubmit, isLoading = false }: LandingPageProps) {
   const [url, setUrl] = useState('');
   const [aboutText, setAboutText] = useState('');
+  const [roastLevel, setRoastLevel] = useState<RoastLevel>('medium');
   const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -34,18 +36,18 @@ export default function LandingPage({ onSubmit, isLoading = false }: LandingPage
       return;
     }
 
-    onSubmit(url, aboutText);
+    onSubmit(url, aboutText, roastLevel);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4 pt-8">
       <div className="max-w-2xl w-full">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
             What Kind of PM Are You? 🎯
           </h1>
-          <p className="text-xl text-gray-700 mb-2">
+          <p className="text-lg text-gray-700 mb-2">
             Discover your Product Manager archetype through AI-powered analysis
           </p>
           <p className="text-sm text-gray-600">
@@ -56,6 +58,13 @@ export default function LandingPage({ onSubmit, isLoading = false }: LandingPage
         {/* Main Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8 mb-6">
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Roast Level Selector */}
+            <RoastSelector
+              selectedLevel={roastLevel}
+              onSelect={setRoastLevel}
+              disabled={isLoading}
+            />
+
             <div>
               <label htmlFor="linkedin-url" className="block text-sm font-medium text-gray-700 mb-2">
                 Paste your LinkedIn profile URL

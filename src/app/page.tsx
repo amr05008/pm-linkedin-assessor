@@ -17,7 +17,7 @@ export default function Home() {
   const [assessmentData, setAssessmentData] = useState<AssessmentData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleUrlSubmit = async (url: string, aboutText: string) => {
+  const handleUrlSubmit = async (url: string, aboutText: string, roastLevel: string) => {
     setIsLoading(true);
     setFlowState('processing');
 
@@ -28,7 +28,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ linkedinUrl: url, aboutText }),
+        body: JSON.stringify({ linkedinUrl: url, aboutText, roastLevel }),
       });
 
       if (!response.ok) {

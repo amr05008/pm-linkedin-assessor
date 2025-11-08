@@ -14,6 +14,10 @@ A witty, snarky web app that analyzes LinkedIn profiles to reveal what kind of P
 
 - **AI-Powered Analysis**: Uses Claude API to generate personalized PM archetypes
 - **12 Unique Archetypes**: From "Vision Vaporware PM" to "Chaotic Neutral PM"
+- **Customizable Roast Level**: Choose your preferred feedback intensity:
+  - ☕ Light Roast - Gentle and encouraging
+  - 🔥 Medium Roast - Witty with a bite (default)
+  - 🥵 Burnt Toast - Brutally honest and unfiltered
 - **Witty Animations**: Entertaining loading states while your profile is analyzed
 - **Email Capture**: Lead generation built-in
 - **Social Sharing**: Share your archetype on LinkedIn, Twitter, etc.

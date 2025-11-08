@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { linkedinUrl, aboutText } = body;
+    const { linkedinUrl, aboutText, roastLevel = 'medium' } = body;
 
     // Validate LinkedIn URL
     if (!linkedinUrl) {
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
       const profileData = await extractLinkedInProfile(linkedinUrl, aboutText);
 
       // Generate AI assessment
-      const assessmentData = await generateAssessment(profileData);
+      const assessmentData = await generateAssessment(profileData, roastLevel);
 
       // Update Assessment record with results
       await prisma.assessment.update({
