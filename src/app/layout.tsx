@@ -7,6 +7,10 @@ import Footer from '@/components/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
+// Force dynamic rendering - prevent caching of pages
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001'),
   title: 'PM Assessment Quiz - Discover Your Product Manager Archetype',
