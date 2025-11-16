@@ -11,7 +11,12 @@ export default function CounterBadge() {
   useEffect(() => {
     async function fetchCount() {
       try {
-        const response = await fetch('/api/stats');
+        const response = await fetch('/api/stats', {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache',
+          }
+        });
         if (response.ok) {
           const data = await response.json();
           setTargetCount(data.count);
